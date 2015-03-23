@@ -1,0 +1,6 @@
+
+out packed/base
++sr src-pack/*.cpp
++hr src-pack/*.h
++i  base.h
++li base*
