@@ -24,8 +24,13 @@ Config::~Config()
         Save(path.c_str());
 }
 
-bool Config::Load(const char *p)
+bool Config::Load(const char *p,bool set_as_autosave)
 {
+	if(set_as_autosave)
+	{
+	    autosave = true;
+		path = p;
+	}
 	return tree.LoadTreeTxt(p,NFS);
 }
 

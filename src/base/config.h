@@ -13,10 +13,11 @@ namespace base
 
 class Config {
 public:
+
 	Config(const char *_path=NULL,bool _autosave=false);
 	~Config();
 
-    bool Load(const char *p);
+    bool Load(const char *p,bool set_as_autosave=false);
     bool Save(const char *p);
 
 	TreeFileRef	GetNode(const char *name,int id,bool write);
@@ -28,6 +29,7 @@ public:
 	void SetInt(const char *name,int v,int id=0);
 	void SetFloat(const char *name,float v,int id=0);
     void SetString(const char *name,const char *v,int id=0);
+
 
 private:
 	TreeFileBuilder		tree;

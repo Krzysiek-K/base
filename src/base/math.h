@@ -172,7 +172,7 @@ struct vector2d {
 	friend _INLINE V operator -(const V &a,const V &b) { return V(a.x-b.x,a.y-b.y); }
 	friend _INLINE V operator *(const V &a,T s) { return V(a.x*s,a.y*s); }
 	friend _INLINE V operator *(T s,const V &a) { return V(a.x*s,a.y*s); }
-	friend _INLINE V operator /(const V &a,T s) { return (s!=0)?V(a.x/s,a.y/s):V(0,0,0); }
+	friend _INLINE V operator /(const V &a,T s) { return (s!=0)?V(a.x/s,a.y/s):V(0,0); }
 	friend _INLINE const V &operator +=(V &a,const V &b) { a.x+=b.x; a.y+=b.y; return a; }
 	friend _INLINE const V &operator -=(V &a,const V &b) { a.x-=b.x; a.y-=b.y; return a; }
 	friend _INLINE const V &operator *=(V &a,T s) { a.x*=s; a.y*=s; return a; }

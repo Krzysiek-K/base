@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+# Visual C++ 2013
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "base.vcxproj", "{141FF20B-1BFF-46BC-9E4F-76ECB6BB321C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "btest", "btest\btest.vcxproj", "{BE3E9C2C-7B6D-49D0-8687-ADB43A92DAD1}"
