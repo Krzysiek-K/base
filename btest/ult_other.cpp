@@ -41,8 +41,8 @@ void ult_chunkfile()
 		ChunkFile f("test.cf");
 		f.read("foo",v1);
 		f.read("bar",v2);
-		printf("Test 1A\n");	for(int i=0;i<v1.size();i++) printf(" %2d %2d\n",v1[i].a,v1[i].b);
-		printf("Test 1B\n");	for(int i=0;i<v2.size();i++) printf(" %2d %2d %2d\n",v2[i].a,v2[i].b,v2[i].c);
+		printf("Test 1A\n");	for(int i=0;i<(int)v1.size();i++) printf(" %2d %2d\n",v1[i].a,v1[i].b);
+		printf("Test 1B\n");	for(int i=0;i<(int)v2.size();i++) printf(" %2d %2d %2d\n",v2[i].a,v2[i].b,v2[i].c);
 	}
 	v1.clear();
 	v2.clear();
@@ -50,7 +50,7 @@ void ult_chunkfile()
 		ChunkFile f("test.cf");
 		f.read("foo",v2);
 		f.read("bar",v1);
-		printf("Test 2A\n");	for(int i=0;i<v1.size();i++) printf(" %2d %2d\n",v1[i].a,v1[i].b);
-		printf("Test 2B\n");	for(int i=0;i<v2.size();i++) printf(" %2d %2d %2d\n",v2[i].a,v2[i].b,v2[i].c);
+		printf("Test 2A\n");	for(int i=0;i<(int)v1.size();i++) printf(" %2d %2d\n",v1[i].a,v1[i].b);
+		printf("Test 2B\n");	for(int i=0;i<(int)v2.size();i++) printf(" %2d %2d %2d\n",v2[i].a,v2[i].b,v2[i].c);
 	}
 }

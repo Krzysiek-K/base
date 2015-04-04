@@ -38,12 +38,17 @@ struct vector3d {
 #if 1
     friend _INLINE V operator -(const V &a) { return V(-a.x,-a.y,-a.z); }
 	friend _INLINE V operator +(const V &a,const V &b) { return V(a.x+b.x,a.y+b.y,a.z+b.z); }
+	friend _INLINE V operator +(const V &a,T b) { return V(a.x+b,a.y+b,a.z+b); }
 	friend _INLINE V operator -(const V &a,const V &b) { return V(a.x-b.x,a.y-b.y,a.z-b.z); }
+	friend _INLINE V operator -(const V &a,T b) { return V(a.x-b,a.y-b,a.z-b); }
 	friend _INLINE V operator *(const V &a,T s) { return V(a.x*s,a.y*s,a.z*s); }
 	friend _INLINE V operator *(T s,const V &a) { return V(a.x*s,a.y*s,a.z*s); }
 	friend _INLINE V operator /(const V &a,T s) { return (s!=0)?V(a.x/s,a.y/s,a.z/s):V(0,0,0); }
 	friend _INLINE const V &operator +=(V &a,const V &b) { a.x+=b.x; a.y+=b.y; a.z+=b.z; return a; }
+	friend _INLINE const V &operator +=(V &a,T b) { a.x+=b; a.y+=b; a.z+=b; return a; }
 	friend _INLINE const V &operator -=(V &a,const V &b) { a.x-=b.x; a.y-=b.y; a.z-=b.z; return a; }
+	friend _INLINE const V &operator -=(V &a,T b) { a.x-=b; a.y-=b; a.z-=b; return a; }
+	friend _INLINE const V &operator *=(V &a,const V &b) { a.x*=b.x; a.y*=b.y; a.z*=b.z; return a; }
 	friend _INLINE const V &operator *=(V &a,T s) { a.x*=s; a.y*=s; a.z*=s; return a; }
 	friend _INLINE const V &operator /=(V &a,T s) { if(s!=0) { a.x/=s; a.y/=s; a.z/=s; } else { a.x=0; a.y=0; a.z=0; } return a; }
 	friend _INLINE bool operator ==(const V &a,const V &b) { return (a.x==b.x)&&(a.y==b.y)&&(a.z==b.z); }
@@ -169,12 +174,16 @@ struct vector2d {
 #if 1
     friend _INLINE V operator -(const V &a) { return V(-a.x,-a.y); }
 	friend _INLINE V operator +(const V &a,const V &b) { return V(a.x+b.x,a.y+b.y); }
+	friend _INLINE V operator +(const V &a,T b) { return V(a.x+b,a.y+b); }
 	friend _INLINE V operator -(const V &a,const V &b) { return V(a.x-b.x,a.y-b.y); }
+	friend _INLINE V operator -(const V &a,T b) { return V(a.x-b,a.y-b); }
 	friend _INLINE V operator *(const V &a,T s) { return V(a.x*s,a.y*s); }
 	friend _INLINE V operator *(T s,const V &a) { return V(a.x*s,a.y*s); }
 	friend _INLINE V operator /(const V &a,T s) { return (s!=0)?V(a.x/s,a.y/s):V(0,0); }
 	friend _INLINE const V &operator +=(V &a,const V &b) { a.x+=b.x; a.y+=b.y; return a; }
+	friend _INLINE const V &operator +=(V &a,T b) { a.x+=b; a.y+=b; return a; }
 	friend _INLINE const V &operator -=(V &a,const V &b) { a.x-=b.x; a.y-=b.y; return a; }
+	friend _INLINE const V &operator -=(V &a,T b) { a.x-=b; a.y-=b; return a; }
 	friend _INLINE const V &operator *=(V &a,T s) { a.x*=s; a.y*=s; return a; }
 	friend _INLINE const V &operator /=(V &a,T s) { if(s!=0) { a.x/=s; a.y/=s; } else { a.x=0; a.y=0; } return a; }
 	friend _INLINE bool operator ==(const V &a,const V &b) { return (a.x==b.x)&&(a.y==b.y); }

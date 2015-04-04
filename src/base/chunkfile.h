@@ -87,7 +87,7 @@ public:
 			int csize = ssize;
 			if(csize>sizeof(T)) csize = sizeof(T);
 
-			for(int i=0;i<data.size();i++)
+			for(int i=0;i<(int)data.size();i++)
 			{
 				T &t = data[i];
 				memset(&t,0,sizeof(T));
