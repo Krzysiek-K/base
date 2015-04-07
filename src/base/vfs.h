@@ -82,6 +82,8 @@ public:
 	virtual bool GetFileList(const char *path,std::vector<std::string> &out);
 	virtual int  GetFileSize(const char *path);
 
+	bool WriteFileLines(const char *path,std::vector<std::string> &v);
+
 	bool DumpRaw(const char *path,void *data,int size);
 
 	template <class _T>

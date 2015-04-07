@@ -76,6 +76,19 @@ int NativeFileSystem::GetFileSize(const char *path)
 	return s;
 }
 
+bool NativeFileSystem::WriteFileLines(const char *path,std::vector<std::string> &v)
+{
+	FILE *fp = fopen(path,"wt");
+	if(!fp) return false;
+	for(int i=0;i<(int)v.size();i++)
+	{
+		fputs(v[i].c_str(),fp);
+		fputc('\n',fp);
+	}
+	fclose(fp);
+	return true;
+}
+
 bool NativeFileSystem::DumpRaw(const char *path,void *data,int size)
 {
 	FILE *fp = fopen(path,"wb");
