@@ -212,6 +212,9 @@ struct vector2d {
 	_INLINE bool all_lequal(const V &v) const { return (x<=v.x)&&(y<=v.y); }
 	_INLINE bool all_gequal(const V &v) const { return (x>=v.x)&&(y>=v.y); }
 
+	_INLINE bool in_box(const V &bmin,const V &bmax) const { return bmin.x<=x && x<=bmax.x && bmin.y<=y && y<=bmax.y; }
+
+
 	_INLINE T length()		const { return sqrt(dot(*this)); }
 	_INLINE T length2()	const { return dot(*this); }
 
