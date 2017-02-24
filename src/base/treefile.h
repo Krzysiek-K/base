@@ -72,10 +72,11 @@ private:
 	TreeFileNode(const char *_name,int _id,bool copy_name=true);
 	~TreeFileNode();
 
-	children_iterator begin() { return children.begin(); }
-	children_iterator end() { return children.end(); }
+	children_iterator begin()	{ return children.begin();	}
+	children_iterator end()		{ return children.end();	}
 
-	TreeFileNode *GetChild(const char *cname,int cid,bool create=false,bool copy_name=true);
+	TreeFileNode *GetChild(const char *cname, int cid, bool create=false, bool copy_name=true);
+	bool		  DeleteChild(const char *cname, int cid);
 
 	bool Validate();
 
@@ -131,22 +132,22 @@ public:
 	iterator begin()		{ return (!node || is_writing) ? iterator() : iterator(node->begin()); }
 	iterator end()			{ return (!node || is_writing) ? iterator() : iterator(node->end()); }
 
+	bool HasChild(const char *name, int id=0) { return GetChild(name, id)!=NULL; }
 
+	bool SerBool(const char *name,bool &v,bool def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),false,def,id); }
+	bool SerByte(const char *name,byte &v,byte def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),false,def,id); }
+	bool SerWord(const char *name,word &v,word def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),false,def,id); }
+	bool SerDword(const char *name,dword &v,dword def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),false,def,id); }
+	bool SerChar(const char *name,char &v,char def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),true,def,id); }
+	bool SerShort(const char *name,short &v,short def,int id=0)	{ return SerializeBasic(name,&v,sizeof(v),true,def,id); }
+	bool SerInt(const char *name,int &v,int def,int id=0)		{ return SerializeBasic(name,&v,sizeof(v),true,def,id); }
 
-	void SerBool(const char *name,bool &v,bool def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),false,def,id); }
-	void SerByte(const char *name,byte &v,byte def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),false,def,id); }
-	void SerWord(const char *name,word &v,word def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),false,def,id); }
-	void SerDword(const char *name,dword &v,dword def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),false,def,id); }
-	void SerChar(const char *name,char &v,char def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),true,def,id); }
-	void SerShort(const char *name,short &v,short def,int id=0)	{ SerializeBasic(name,&v,sizeof(v),true,def,id); }
-	void SerInt(const char *name,int &v,int def,int id=0)		{ SerializeBasic(name,&v,sizeof(v),true,def,id); }
+	bool SerializeBasic(const char *name,void *v,int size,bool sign,int def,int id=0);
+	bool SerFloat(const char *name,float &v,float def,int id=0);
+	bool SerPChar(const char *name,char *str,int len,const char *def,int id=0);
+	bool SerString(const char *name,std::string &out,const char *def,int id=0);
 
-	void SerializeBasic(const char *name,void *v,int size,bool sign,int def,int id=0);
-	void SerFloat(const char *name,float &v,float def,int id=0);
-	void SerPChar(const char *name,char *str,int len,const char *def,int id=0);
-	void SerString(const char *name,std::string &out,const char *def,int id=0);
-
-	void		Write_SetRaw(const char *name,const void *data,int size,int id=0);
+	bool		Write_SetRaw(const char *name,const void *data,int size,int id=0);
 	int			Read_GetRawSize(const char *name,int id=0);
 	const void *Read_GetRawData(const char *name,int id=0);
 
@@ -183,9 +184,16 @@ public:
 		}
 	}
 
-	bool IsWriting() { return is_writing; }
-	bool IsReading() { return !is_writing; }
+	bool IsWriting() { return is_writing;	}
+	bool IsReading() { return !is_writing;	}
 
+
+	// more aggressive operations
+
+	void ForceReadMode()						{ is_writing = false;	}
+	void ForceWriteMode()						{ is_writing = true;	}
+	bool DeleteChild(const char *name, int id)	{ if( !node ) return false;		return node->DeleteChild(name, id); }
+	bool DeleteChild(TreeFileRef tf)			{ if( !node ) return false;		return node->DeleteChild(tf.GetName(), tf.GetId()); }
 
 private:
 	friend class TreeFileBuilder;

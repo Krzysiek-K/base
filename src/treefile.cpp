@@ -41,7 +41,7 @@ TreeFileNode::TreeFileNode(const char *_name,int _id,bool copy_name)
 
 TreeFileNode::~TreeFileNode()
 {
-	map<NameRef,TreeFileNode *>::iterator p,prev;
+	map<NameRef,TreeFileNode *>::iterator p, prev;
 
 	p = children.begin();
 	while(p!=children.end())
@@ -79,6 +79,24 @@ TreeFileNode *TreeFileNode::GetChild(const char *cname,int cid,bool create,bool 
 
 	return n;
 }
+
+bool TreeFileNode::DeleteChild(const char *cname, int cid)
+{
+	NameRef key;
+	key.name = cname;
+	key.clone_id = cid;
+
+	map<NameRef, TreeFileNode *>::iterator child = children.find(key);
+
+	if( child == children.end() )
+		return false;
+
+	delete child->second;
+	children.erase(child);
+
+	return true;
+}
+
 
 bool TreeFileNode::Validate()
 {
@@ -228,13 +246,13 @@ int TreeFileRef::GetCloneArraySize(const char *name)
 	return id;
 }
 
-void TreeFileRef::SerializeBasic(const char *name,void *v,int size,bool sign,int def,int id)
+bool TreeFileRef::SerializeBasic(const char *name,void *v,int size,bool sign,int def,int id)
 {
 	if(!is_writing)
 		memcpy(v,&def,size);
 
 	TreeFileNode *n = GetChild(name,id);
-	if(!n) return;
+	if(!n) return false;
 
 	int i,m;
 
@@ -255,24 +273,30 @@ void TreeFileRef::SerializeBasic(const char *name,void *v,int size,bool sign,int
 	{
 		if(n->GetInt(i))
 			memcpy(v,&i,size);
+		else
+			return false;
 	}
+
+	return true;
 }
 
-void TreeFileRef::SerFloat(const char *name,float &v,float def,int id)
+bool TreeFileRef::SerFloat(const char *name,float &v,float def,int id)
 {
 	if(!is_writing)
 		v = def;
 
 	TreeFileNode *n = GetChild(name,id);
-	if(!n) return;
+	if(!n) return false;
 
 	if(is_writing)
 		n->SetFloat(v);
 	else
-		n->GetFloat(v);
+		return n->GetFloat(v);
+
+	return true;
 }
 
-void TreeFileRef::SerPChar(const char *name,char *str,int len,const char *def,int id)
+bool TreeFileRef::SerPChar(const char *name,char *str,int len,const char *def,int id)
 {
 	TreeFileNode *n = GetChild(name,id);
 	if(!n)
@@ -282,7 +306,7 @@ void TreeFileRef::SerPChar(const char *name,char *str,int len,const char *def,in
 			strncpy(str,def,len-1);
 			str[len-1]=0;
 		}
-		return;
+		return false;
 	}
 
 	if(is_writing)
@@ -291,41 +315,48 @@ void TreeFileRef::SerPChar(const char *name,char *str,int len,const char *def,in
 	{
 		string s;
 		const char *src = def;
-		if(n->GetString(s))
+		bool done = n->GetString(s);
+		if( done )
 			src = s.c_str();
 		strncpy(str,src,len-1);
 		str[len-1]=0;
+		return done;
 	}
+
+	return true;
 }
 
-void TreeFileRef::SerString(const char *name,std::string &out,const char *def,int id)
+bool TreeFileRef::SerString(const char *name,std::string &out,const char *def,int id)
 {
 	if(is_writing)
-	{
-		SerPChar(name,(char*)out.c_str(),out.length()+1,def,id);
-		return;
-	}
+		return SerPChar(name,(char*)out.c_str(),out.length()+1,def,id);
 
 	TreeFileNode *n = GetChild(name,id);
 	if(!n)
 	{
 		out = def;
-		return;
+		return false;
 	}
 
 	if(!n->GetString(out))
+	{
 		out = def;
+		return false;
+	}
+
+	return true;
 }
 
-void TreeFileRef::Write_SetRaw(const char *name,const void *data,int size,int id)
+bool TreeFileRef::Write_SetRaw(const char *name,const void *data,int size,int id)
 {
-	if(!is_writing) return;
+	if(!is_writing) return false;
 	if(size<0) size = 0;
 
 	TreeFileNode *n = GetChild(name,id);
-	if(!n) return;
+	if(!n) return false;
 
 	n->SetData((const unsigned char*)data,size,TreeFileNode::T_RAW);
+	return true;
 }
 
 int TreeFileRef::Read_GetRawSize(const char *name,int id)
